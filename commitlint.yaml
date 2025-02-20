@@ -3,14 +3,46 @@ include: package:commitlint_cli/commitlint.yaml
 
 # Custom rules
 rules:
+  scope-enum:
+    - 2
+    - always
+    - ['ui', 'widgets', 'screens', 'navigation', 'state', 'theme', 'animations', 'network', 'db', 'storage', 'auth', 'assets', 'utils', 'i18n', 'a11y', 'arch', 'lint', 'deps', 'permissions', 'platform', 'services', 'models', 'firebase', 'notifications', 'camera', 'sensors', 'location', 'tests', 'perf']
+
+# ui: composants UI généraux
+# widgets: widgets spécifiques
+# screens: écrans de l'application
+# navigation: système de navigation
+# state: gestion d'état (Provider, Bloc, Riverpod)
+# theme: thème et styles
+# animations: animations
+# network: appels réseau et API
+# db: base de données locale
+# storage: stockage local
+# auth: authentification
+# assets: ressources (images, fonts)
+# utils: fonctions utilitaires
+# i18n: internationalisation
+# a11y: accessibilité
+# arch: architecture
+# lint: règles de linting
+# deps: dépendances et packages
+# permissions: gestions des permissions
+# platform: code spécifique à iOS/Android
+# services: services divers
+# models: modèles de données
+# firebase: intégrations Firebase
+# notifications: notifications push
+# camera: fonctionnalités caméra
+# sensors: capteurs de l'appareil
+# location: services de localisation
+# tests: tests unitaires ou d'intégration
+# perf: optimisations de performance
+
   type-enum:
     - 2
     - always
     - ['build', 'chore', 'ci', 'docs', 'feat', 'upgrade', 'fix', 'hotfix', 'types', 'perf', 'refactor', 'revert', 'style', 'test', 'merge', 'text', 'wip', 'config', 'setup', 'i18n', 'deploy', 'improve', 'database']
-  type-case:
-    - 2
-    - always
-    - 'upper-case'
+
 
 # Whether commitlint uses the default ignore rules.
 defaultIgnores: true
@@ -18,3 +50,4 @@ defaultIgnores: true
 # Pattern that matches commit message if commitlint should ignore the given message.
 ignores:
   - r'^fixup'
+
