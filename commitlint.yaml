@@ -6,7 +6,7 @@ rules:
   scope-enum:
     - 2
     - always
-    - ['ui', 'widgets', 'screens', 'navigation', 'state', 'theme', 'animations', 'network', 'db', 'storage', 'auth', 'assets', 'utils', 'i18n', 'a11y', 'arch', 'lint', 'deps', 'permissions', 'platform', 'services', 'models', 'firebase', 'notifications', 'camera', 'sensors', 'location', 'tests', 'perf']
+    - ['ui', 'widgets', 'screens', 'navigation', 'state', 'theme', 'animations', 'network', 'config', 'db', 'storage', 'auth', 'assets', 'utils', 'i18n', 'a11y', 'arch', 'lint', 'deps', 'permissions', 'platform', 'services', 'models', 'firebase', 'notifications', 'camera', 'sensors', 'location', 'tests', 'perf']
 
 # ui: composants UI généraux
 # widgets: widgets spécifiques
@@ -16,6 +16,7 @@ rules:
 # theme: thème et styles
 # animations: animations
 # network: appels réseau et API
+# config: configuration de l'application
 # db: base de données locale
 # storage: stockage local
 # auth: authentification
@@ -42,6 +43,30 @@ rules:
     - 2
     - always
     - ['build', 'chore', 'ci', 'docs', 'feat', 'upgrade', 'fix', 'hotfix', 'types', 'perf', 'refactor', 'revert', 'style', 'test', 'merge', 'text', 'wip', 'config', 'setup', 'i18n', 'deploy', 'improve', 'database']
+
+# build: Modifications affectant le système de build et les dépendances externes.
+# chore: Tâches de routine sans modification du code de production.
+# ci: Modifications des configurations ou des scripts liés à l'intégration continue.
+# docs: Mises à jour de la documentation.
+# feat: Introduction de nouvelles fonctionnalités.
+# upgrade: Mise à jour de versions pour les bibliothèques ou autres dépendances.
+# fix: Corrections de bugs dans le code existant.
+# hotfix: Corrections urgentes directement en production.
+# types: Modifications des types de données (TypeScript).
+# perf: Améliorations de performance de l'application.
+# refactor: Restructuration du code existant sans changer son comportement.
+# revert: Annulation d'un commit précédent.
+# style: Changements de style qui n'affectent pas la signification du code.
+# test: Ajout ou modification de tests automatiques.
+# merge: Fusion de branches.
+# text: Modifications mineures de texte ou de messages dans l'application.
+# wip: Work in Progress, pour des commits intermédiaires.
+# config: Modifications des configurations affectant le fonctionnement de l'application.
+# setup: Configuration initiale d'un projet ou d'un environnement.
+# i18n: Modifications liées à l'internationalisation.
+# deploy: Tâches spécifiques au déploiement de l'application.
+# improve: Améliorations générales ne relevant pas d'autres catégories.
+# database: Modifications spécifiques aux bases de données.
 
 
 # Whether commitlint uses the default ignore rules.
