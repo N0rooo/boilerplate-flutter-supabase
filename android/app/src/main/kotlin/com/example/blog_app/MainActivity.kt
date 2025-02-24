@@ -1,4 +1,4 @@
-package com.example.blog_app
+package com.example.boilerplate_flutter
 
 import io.flutter.embedding.android.FlutterActivity
 

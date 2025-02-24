@@ -1,6 +1,6 @@
 {
-    "name": "blog_app",
-    "short_name": "blog_app",
+    "name": "post_app",
+    "short_name": "post_app",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

@@ -1,3 +1,4 @@
+import 'package:boilerplate_flutter/features/post/presentation/pages/post_page.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatefulWidget {
@@ -14,7 +15,7 @@ class _MainScreenState extends State<MainScreen> {
   int _page = 0;
 
   final List<Widget> _pages = [
-    const Center(child: Text('Home')),
+    const PostPage(),
     const Center(child: Text('Search')),
     const Center(child: Text('Profile'))
   ];

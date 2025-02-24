@@ -3,6 +3,7 @@ import 'package:boilerplate_flutter/core/common/screens/main_screen.dart';
 import 'package:boilerplate_flutter/core/theme/theme.dart';
 import 'package:boilerplate_flutter/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:boilerplate_flutter/features/auth/presentation/pages/login_page.dart';
+import 'package:boilerplate_flutter/features/post/presentation/bloc/post_bloc.dart';
 import 'package:boilerplate_flutter/init_dependencies.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +18,10 @@ Future<void> main() async {
       ),
       BlocProvider(
         create: (_) => serviceLocator<AuthBloc>(),
-      )
+      ),
+      BlocProvider(
+        create: (_) => serviceLocator<PostBloc>(),
+      ),
     ],
     child: MyApp(),
   ));
