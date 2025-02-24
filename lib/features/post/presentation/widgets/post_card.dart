@@ -21,6 +21,7 @@ class PostCard extends StatelessWidget {
       },
       child: Container(
         height: 200,
+        width: double.infinity,
         margin: const EdgeInsets.all(16).copyWith(
           bottom: 4,
         ),

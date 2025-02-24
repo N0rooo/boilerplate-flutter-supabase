@@ -16,8 +16,9 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _pages = [
     const PostPage(),
-    const Center(child: Text('Search')),
-    const Center(child: Text('Profile'))
+    const Center(child: Text('Chat')),
+    const Center(child: Text('Profile')),
+    const Center(child: Text('Settings'))
   ];
 
   @override
@@ -34,6 +35,11 @@ class _MainScreenState extends State<MainScreen> {
             selectedIcon: Icon(Icons.home),
             icon: Icon(Icons.home_outlined),
             label: 'Home',
+          ),
+          NavigationDestination(
+            selectedIcon: Icon(Icons.chat),
+            icon: Icon(Icons.chat_outlined),
+            label: 'Chat',
           ),
           NavigationDestination(
             selectedIcon: Icon(Icons.person),

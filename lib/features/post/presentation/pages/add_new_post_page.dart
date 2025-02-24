@@ -79,7 +79,7 @@ class _AddNewPostPageState extends State<AddNewPostPage> {
       body: BlocConsumer<PostBloc, PostState>(
         listener: (context, state) {
           if (state is PostFailure) {
-            showScnackBar(context, state.error);
+            showSnackBar(context, state.error);
           } else if (state is PostUploadSuccess) {
             Navigator.pushAndRemoveUntil(
               context,

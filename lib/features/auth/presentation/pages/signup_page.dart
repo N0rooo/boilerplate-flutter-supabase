@@ -42,7 +42,7 @@ class _SignUpPageState extends State<SignUpPage> {
         child: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state) {
             if (state is AuthFailure) {
-              showScnackBar(context, state.message);
+              showSnackBar(context, state.message);
             }
             // else if (state is AuthSuccess) {
             //   Navigator.pushAndRemoveUntil(context, '/home');
