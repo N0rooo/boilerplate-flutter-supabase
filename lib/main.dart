@@ -1,4 +1,5 @@
 import 'package:boilerplate_flutter/core/common/cubits/app_user/app_user_cubit.dart';
+import 'package:boilerplate_flutter/core/common/screens/main_screen.dart';
 import 'package:boilerplate_flutter/core/theme/theme.dart';
 import 'package:boilerplate_flutter/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:boilerplate_flutter/features/auth/presentation/pages/login_page.dart';
@@ -50,11 +51,7 @@ class _MyAppState extends State<MyApp> {
         },
         builder: (context, isLoggedIn) {
           if (isLoggedIn) {
-            return Scaffold(
-              body: Center(
-                child: Text('Logged in!'),
-              ),
-            );
+            return const MainScreen();
           }
           return const LoginPage();
         },
