@@ -1,8 +1,8 @@
-import 'package:blog_app/core/error/exceptions.dart';
-import 'package:blog_app/core/error/failures.dart';
-import 'package:blog_app/features/auth/data/datasources/auth_remote_data_source.dart';
-import 'package:blog_app/core/common/entities/user.dart';
-import 'package:blog_app/features/auth/domain/repository/auth_repository.dart';
+import 'package:boilerplate_flutter/core/error/exceptions.dart';
+import 'package:boilerplate_flutter/core/error/failures.dart';
+import 'package:boilerplate_flutter/features/auth/data/datasources/auth_remote_data_source.dart';
+import 'package:boilerplate_flutter/core/common/entities/user.dart';
+import 'package:boilerplate_flutter/features/auth/domain/repository/auth_repository.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as sb;
 
