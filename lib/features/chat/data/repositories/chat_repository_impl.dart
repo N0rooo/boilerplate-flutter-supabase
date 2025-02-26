@@ -1,3 +1,4 @@
+import 'package:boilerplate_flutter/core/common/entities/user.dart';
 import 'package:boilerplate_flutter/core/error/exceptions.dart';
 import 'package:boilerplate_flutter/core/error/failures.dart';
 import 'package:boilerplate_flutter/features/chat/data/datasource/chat_remote_data_source.dart';
@@ -58,6 +59,18 @@ class ChatRepositoryImpl implements ChatRepository {
       return Stream.value(left(Failure(e.message)));
     } catch (e) {
       return Stream.value(left(Failure(e.toString())));
+    }
+  }
+
+  @override
+  Future<Either<Failure, User>> getUserInfo(String userId) async {
+    try {
+      final result = await chatRemoteDataSource.getUserInfo(userId);
+      return right(result);
+    } on ServerException catch (e) {
+      return left(Failure(e.message));
+    } catch (e) {
+      return left(Failure(e.toString()));
     }
   }
 }

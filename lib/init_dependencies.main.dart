@@ -171,6 +171,11 @@ void _initChat() {
         serviceLocator(),
       ),
     )
+    ..registerFactory(
+      () => GetUserInfo(
+        serviceLocator(),
+      ),
+    )
 
     // Bloc
     ..registerLazySingleton(
@@ -183,6 +188,7 @@ void _initChat() {
       () => MessageBloc(
         getMessagesStream: serviceLocator(),
         sendMessage: serviceLocator(),
+        getUserInfo: serviceLocator(),
       ),
     );
 }

@@ -96,18 +96,28 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                     child: Text(state.message),
                   );
                 }
-
+                print(state);
                 final messages = state is MessageGetMessagesSuccess
                     ? state.messages
                     : (state is MessageSendMessageSuccess
-                        ? [state.message]
+                        ? state.messages
                         : (state is MessageSendMessageLoading
                             ? state.messages
                             : []));
 
+                final users = state is MessageGetMessagesSuccess
+                    ? state.users
+                    : (state is MessageSendMessageSuccess
+                        ? state.users
+                        : (state is MessageSendMessageLoading
+                            ? state.users
+                            : {}));
+
                 if (messages.isEmpty) {
                   return const Center(
-                    child: Text('No messages yet'),
+                    child: Text(
+                      'No messages yet',
+                    ),
                   );
                 }
 
@@ -124,8 +134,11 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                       opacity: isPending ? 0.5 : 1.0,
                       child: Container(
                         child: ChatMessageBuble(
+                          user: users[message.senderId],
                           message: message.content,
                           isCurrentUser: isCurrentUser,
+                          showUserName:
+                              widget.chatRoom.participantIds.length > 2,
                         ),
                       ),
                     );

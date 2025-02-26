@@ -87,13 +87,14 @@ class _ChatPageState extends State<ChatPage> {
                   const Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: const Center(
-                        child: SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
+                      child: SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                        ),
                       ),
-                    )),
+                    ),
                   ),
                 Expanded(
                   child: rooms.isEmpty
@@ -112,8 +113,9 @@ class _ChatPageState extends State<ChatPage> {
                                     .toList() ??
                                 [];
                             return ListTile(
-                              title: Text(participantsNamesWithoutCurrentUser
-                                  .join(', ')),
+                              title: Text(
+                                participantsNamesWithoutCurrentUser.join(', '),
+                              ),
                               onTap: () {
                                 Navigator.push(
                                   context,

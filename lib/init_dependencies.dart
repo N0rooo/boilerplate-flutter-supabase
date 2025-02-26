@@ -18,6 +18,7 @@ import 'package:boilerplate_flutter/features/chat/data/repositories/chat_reposit
 import 'package:boilerplate_flutter/features/chat/domain/repository/chat_repository.dart';
 import 'package:boilerplate_flutter/features/chat/domain/usecase/create_chat_room.dart';
 import 'package:boilerplate_flutter/features/chat/domain/usecase/get_chat_room.dart';
+import 'package:boilerplate_flutter/features/chat/domain/usecase/get_user_info.dart';
 import 'package:boilerplate_flutter/features/chat/domain/usecase/send_message.dart';
 import 'package:boilerplate_flutter/features/chat/domain/usecase/get_messages_stream.dart';
 import 'package:boilerplate_flutter/features/chat/presentation/bloc/chat/chat_bloc.dart';

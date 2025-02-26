@@ -21,6 +21,8 @@ abstract interface class ChatRemoteDataSource {
   Future<List<ChatRoomModel>> getChatRooms(String userId);
 
   Stream<List<MessageModel>> getMessages(String chatRoomId);
+
+  Future<UserModel> getUserInfo(String userId);
 }
 
 class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
@@ -123,6 +125,23 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
           .map((messages) => messages
               .map((message) => MessageModel.fromJson(message))
               .toList());
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<UserModel> getUserInfo(String userId) async {
+    try {
+      final userData = await supabaseClient
+          .from(SupabaseTables.profiles)
+          .select()
+          .eq('id', userId)
+          .single();
+
+      return UserModel.fromJson(userData);
+    } on PostgrestException catch (e) {
+      throw ServerException(e.message);
     } catch (e) {
       throw ServerException(e.toString());
     }
