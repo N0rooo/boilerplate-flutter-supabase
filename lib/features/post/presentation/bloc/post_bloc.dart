@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:boilerplate_flutter/core/usecase/usecase.dart';
+import 'package:boilerplate_flutter/core/usecases/usecase.dart';
 import 'package:boilerplate_flutter/features/post/domain/entities/post.dart';
 import 'package:boilerplate_flutter/features/post/domain/usecases/get_all_posts.dart';
 import 'package:boilerplate_flutter/features/post/domain/usecases/upload_post.dart';

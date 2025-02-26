@@ -2,13 +2,13 @@ import 'dart:io';
 
 import 'package:boilerplate_flutter/core/common/cubits/app_user/app_user_cubit.dart';
 import 'package:boilerplate_flutter/core/common/screens/main_screen.dart';
+import 'package:boilerplate_flutter/core/common/widgets/input.dart';
 import 'package:boilerplate_flutter/core/constants/constants.dart';
 import 'package:boilerplate_flutter/core/theme/app_palette.dart';
 import 'package:boilerplate_flutter/core/utils/pick_image.dart';
 import 'package:boilerplate_flutter/core/utils/show_snackbar.dart';
 import 'package:boilerplate_flutter/features/post/presentation/bloc/post_bloc.dart';
 import 'package:boilerplate_flutter/features/post/presentation/pages/post_page.dart';
-import 'package:boilerplate_flutter/features/post/presentation/widgets/post_editor.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -179,12 +179,12 @@ class _AddNewPostPageState extends State<AddNewPostPage> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    PostEditor(
+                    Input(
                       controller: titleController,
                       hintText: 'Post title',
                     ),
                     const SizedBox(height: 10),
-                    PostEditor(
+                    Input(
                       controller: contentController,
                       hintText: 'Post content',
                     ),

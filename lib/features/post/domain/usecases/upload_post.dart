@@ -2,7 +2,7 @@
 import 'dart:io';
 
 import 'package:boilerplate_flutter/core/error/failures.dart';
-import 'package:boilerplate_flutter/core/usecase/usecase.dart';
+import 'package:boilerplate_flutter/core/usecases/usecase.dart';
 import 'package:boilerplate_flutter/features/post/domain/entities/post.dart';
 import 'package:boilerplate_flutter/features/post/domain/repositories/post_repository.dart';
 import 'package:fpdart/fpdart.dart';

@@ -1,5 +1,5 @@
 import 'package:boilerplate_flutter/core/error/failures.dart';
-import 'package:boilerplate_flutter/core/usecase/usecase.dart';
+import 'package:boilerplate_flutter/core/usecases/usecase.dart';
 import 'package:boilerplate_flutter/core/common/entities/user.dart';
 import 'package:boilerplate_flutter/features/auth/domain/repository/auth_repository.dart';
 import 'package:fpdart/fpdart.dart';

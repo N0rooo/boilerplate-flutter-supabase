@@ -3,6 +3,9 @@ import 'package:boilerplate_flutter/core/common/screens/main_screen.dart';
 import 'package:boilerplate_flutter/core/theme/theme.dart';
 import 'package:boilerplate_flutter/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:boilerplate_flutter/features/auth/presentation/pages/login_page.dart';
+import 'package:boilerplate_flutter/core/blocs/user_search/user_search_bloc.dart';
+import 'package:boilerplate_flutter/features/chat/presentation/bloc/chat/chat_bloc.dart';
+import 'package:boilerplate_flutter/features/chat/presentation/bloc/message/message_bloc.dart';
 import 'package:boilerplate_flutter/features/post/presentation/bloc/post_bloc.dart';
 import 'package:boilerplate_flutter/init_dependencies.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +24,15 @@ Future<void> main() async {
       ),
       BlocProvider(
         create: (_) => serviceLocator<PostBloc>(),
+      ),
+      BlocProvider(
+        create: (_) => serviceLocator<UserSearchBloc>(),
+      ),
+      BlocProvider(
+        create: (_) => serviceLocator<ChatBloc>(),
+      ),
+      BlocProvider(
+        create: (_) => serviceLocator<MessageBloc>(),
       ),
     ],
     child: MyApp(),

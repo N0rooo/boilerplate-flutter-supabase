@@ -1,5 +1,5 @@
 import 'package:boilerplate_flutter/core/common/cubits/app_user/app_user_cubit.dart';
-import 'package:boilerplate_flutter/core/usecase/usecase.dart';
+import 'package:boilerplate_flutter/core/usecases/usecase.dart';
 import 'package:boilerplate_flutter/core/common/entities/user.dart';
 import 'package:boilerplate_flutter/features/auth/domain/usecases/current_user.dart';
 import 'package:boilerplate_flutter/features/auth/domain/usecases/user_login.dart';

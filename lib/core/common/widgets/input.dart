@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
-class PostEditor extends StatelessWidget {
+class Input extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
+  final int? maxLines;
 
-  const PostEditor({
+  const Input({
     super.key,
     required this.controller,
     required this.hintText,
+    this.maxLines,
   });
 
   @override
@@ -17,7 +19,7 @@ class PostEditor extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
       ),
-      maxLines: null,
+      maxLines: maxLines,
       validator: (value) {
         if (value!.trim().isEmpty) {
           return '$hintText is missing!';

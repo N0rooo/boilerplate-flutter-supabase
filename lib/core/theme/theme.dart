@@ -1,4 +1,5 @@
 import 'package:boilerplate_flutter/core/theme/app_palette.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AppTheme {
@@ -15,8 +16,20 @@ class AppTheme {
     appBarTheme: const AppBarTheme(
       backgroundColor: AppPallete.backgroundColor,
     ),
+    iconTheme: const IconThemeData(
+      color: AppPallete.whiteColor,
+    ),
+    cupertinoOverrideTheme: const CupertinoThemeData(
+      textTheme: CupertinoTextThemeData(
+        actionTextStyle: TextStyle(
+          color: AppPallete.whiteColor,
+        ),
+      ),
+    ),
     inputDecorationTheme: InputDecorationTheme(
       contentPadding: const EdgeInsets.all(27),
+      border: _border(),
+      errorBorder: _border(AppPallete.errorColor),
       enabledBorder: _border(),
       focusedBorder: _border(AppPallete.gradient2),
     ),

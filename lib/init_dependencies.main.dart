@@ -5,6 +5,8 @@ final serviceLocator = GetIt.instance;
 Future<void> initDependencies() async {
   _initAuth();
   _initPost();
+  _initCore();
+  _initChat();
   final supabase = await Supabase.initialize(
     url: AppSecrets.supabaseUrl,
     anonKey: AppSecrets.supabaseAnonKey,
@@ -25,6 +27,33 @@ Future<void> initDependencies() async {
   serviceLocator.registerFactory<ConnectionChecker>(() => ConnectionCheckerImpl(
         serviceLocator(),
       ));
+}
+
+void _initCore() {
+  serviceLocator
+    ..registerFactory<UserRemoteDataSource>(
+      () => UserRemoteDataSourceImpl(
+        serviceLocator(),
+      ),
+    )
+    // Repository
+    ..registerFactory<UserRepository>(
+      () => UserRepositoryImpl(
+        serviceLocator(),
+      ),
+    )
+    // Usecases
+    ..registerFactory(
+      () => SearchUsers(
+        serviceLocator(),
+      ),
+    )
+    ..registerLazySingleton(
+      () => UserSearchBloc(
+        searchUsers: serviceLocator(),
+      ),
+    );
+  // Bloc
 }
 
 void _initAuth() {
@@ -105,6 +134,55 @@ void _initPost() {
       () => PostBloc(
         uploadPost: serviceLocator(),
         getAllPosts: serviceLocator(),
+      ),
+    );
+}
+
+void _initChat() {
+  serviceLocator
+    ..registerFactory<ChatRemoteDataSource>(
+      () => ChatRemoteDataSourceImpl(
+        serviceLocator(),
+      ),
+    )
+    ..registerFactory<ChatRepository>(
+      () => ChatRepositoryImpl(
+        serviceLocator(),
+      ),
+    )
+    // Usecases
+    ..registerFactory(
+      () => SendMessage(
+        serviceLocator(),
+      ),
+    )
+    ..registerFactory(
+      () => CreateChatRoom(
+        serviceLocator(),
+      ),
+    )
+    ..registerFactory(
+      () => GetChatRooms(
+        serviceLocator(),
+      ),
+    )
+    ..registerFactory(
+      () => GetMessagesStream(
+        serviceLocator(),
+      ),
+    )
+
+    // Bloc
+    ..registerLazySingleton(
+      () => ChatBloc(
+        createChatRoom: serviceLocator(),
+        getChatRooms: serviceLocator(),
+      ),
+    )
+    ..registerLazySingleton(
+      () => MessageBloc(
+        getMessagesStream: serviceLocator(),
+        sendMessage: serviceLocator(),
       ),
     );
 }

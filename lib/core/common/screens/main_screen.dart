@@ -1,3 +1,4 @@
+import 'package:boilerplate_flutter/features/chat/presentation/pages/chat_page.dart';
 import 'package:boilerplate_flutter/features/post/presentation/pages/post_page.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +17,7 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _pages = [
     const PostPage(),
-    const Center(child: Text('Chat')),
+    const ChatPage(),
     const Center(child: Text('Profile')),
     const Center(child: Text('Settings'))
   ];

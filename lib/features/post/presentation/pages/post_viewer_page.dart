@@ -7,8 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class PostViewerPage extends StatelessWidget {
-  static route(Post post) =>
-      MaterialPageRoute(builder: (context) => PostViewerPage(post: post));
+  static route(Post post) => MaterialPageRoute(
+        builder: (context) => PostViewerPage(post: post),
+      );
   final Post post;
   const PostViewerPage({super.key, required this.post});
 
