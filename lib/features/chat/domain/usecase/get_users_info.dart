@@ -4,19 +4,19 @@ import 'package:boilerplate_flutter/core/common/entities/user.dart';
 import 'package:boilerplate_flutter/features/chat/domain/repository/chat_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
-class GetUserInfo implements UseCase<User, GetUserInfoParams> {
+class GetUsersInfo implements UseCase<List<User>, GetUsersInfoParams> {
   final ChatRepository repository;
 
-  GetUserInfo(this.repository);
+  GetUsersInfo(this.repository);
 
   @override
-  Future<Either<Failure, User>> call(GetUserInfoParams params) async {
-    return await repository.getUserInfo(params.userId);
+  Future<Either<Failure, List<User>>> call(GetUsersInfoParams params) async {
+    return await repository.getUsersInfo(params.userIds);
   }
 }
 
-class GetUserInfoParams {
-  final String userId;
+class GetUsersInfoParams {
+  final List<String> userIds;
 
-  GetUserInfoParams({required this.userId});
+  GetUsersInfoParams({required this.userIds});
 }

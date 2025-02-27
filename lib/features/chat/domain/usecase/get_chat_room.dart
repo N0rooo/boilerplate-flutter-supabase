@@ -4,19 +4,19 @@ import 'package:boilerplate_flutter/features/chat/domain/entities/chat_room.dart
 import 'package:boilerplate_flutter/features/chat/domain/repository/chat_repository.dart';
 import 'package:fpdart/src/either.dart';
 
-class GetChatRooms implements UseCase<List<ChatRoom>, GetChatRoomsParams> {
+class GetChatRooms
+    implements StreamUseCase<List<ChatRoom>, GetChatRoomsParams> {
   final ChatRepository chatRepository;
 
   GetChatRooms(this.chatRepository);
   @override
-  Future<Either<Failure, List<ChatRoom>>> call(
-      GetChatRoomsParams params) async {
-    return chatRepository.getChatRooms(params.userId);
+  Stream<Either<Failure, List<ChatRoom>>> call(GetChatRoomsParams params) {
+    return chatRepository.getChatRooms(params.viewerId);
   }
 }
 
 class GetChatRoomsParams {
-  final String userId;
+  final String viewerId;
 
-  GetChatRoomsParams({required this.userId});
+  GetChatRoomsParams({required this.viewerId});
 }

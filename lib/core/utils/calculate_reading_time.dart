@@ -3,6 +3,5 @@ int calculateReadingTime(String content) {
   // speed of reading 225 words per minute
   final readingTime = (wordCount / 225);
 
-  print(readingTime);
   return readingTime.ceil();
 }

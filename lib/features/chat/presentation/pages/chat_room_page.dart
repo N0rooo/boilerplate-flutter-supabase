@@ -22,16 +22,16 @@ class ChatRoomPage extends StatefulWidget {
 class _ChatRoomPageState extends State<ChatRoomPage> {
   final messageController = TextEditingController();
 
-  String get _participantNamesWithoutCurrentUser =>
-      widget.chatRoom.participants
-          ?.where((e) => e.id != widget.chatRoom.participantIds.first)
-          .map((e) => e.name)
-          .join(', ') ??
-      '';
+  // String get _participantNamesWithoutCurrentUser =>
+  //     widget.chatRoom.participants
+  //         ?.where((e) => e.id != widget.chatRoom.participantIds.first)
+  //         .map((e) => e.name)
+  //         .join(', ') ??
+  //     '';
 
-  String get _chatTitle => widget.chatRoom.name.isEmpty
-      ? _participantNamesWithoutCurrentUser
-      : widget.chatRoom.name;
+  // String get _chatTitle => widget.chatRoom.name.isEmpty
+  //     ? _participantNamesWithoutCurrentUser
+  //     : widget.chatRoom.name;
 
   @override
   void initState() {
@@ -72,7 +72,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(_chatTitle),
+        title: Text(widget.chatRoom.name),
       ),
       body: Column(
         children: [
@@ -84,7 +84,6 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                 }
               },
               builder: (context, state) {
-                print(state);
                 if (state is MessageGetMessagesLoading) {
                   return const Center(
                     child: CircularProgressIndicator(),
@@ -96,7 +95,6 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                     child: Text(state.message),
                   );
                 }
-                print(state);
                 final messages = state is MessageGetMessagesSuccess
                     ? state.messages
                     : (state is MessageSendMessageSuccess
@@ -122,23 +120,23 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                 }
 
                 return ListView.builder(
-                  reverse: true, // Show latest messages at the bottom
+                  reverse: true,
                   itemCount: messages.length,
                   itemBuilder: (context, index) {
                     final message = messages[index];
                     final isCurrentUser = message.senderId == currentUser.id;
                     final isPending =
                         state is MessageSendMessageLoading && index == 0;
-
+                    final user = users[message.senderId];
                     return Opacity(
                       opacity: isPending ? 0.5 : 1.0,
                       child: Container(
                         child: ChatMessageBuble(
-                          user: users[message.senderId],
+                          user: user,
                           message: message.content,
                           isCurrentUser: isCurrentUser,
                           showUserName:
-                              widget.chatRoom.participantIds.length > 2,
+                              widget.chatRoom.participants!.length > 2,
                         ),
                       ),
                     );

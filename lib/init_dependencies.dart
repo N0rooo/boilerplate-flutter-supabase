@@ -18,11 +18,12 @@ import 'package:boilerplate_flutter/features/chat/data/repositories/chat_reposit
 import 'package:boilerplate_flutter/features/chat/domain/repository/chat_repository.dart';
 import 'package:boilerplate_flutter/features/chat/domain/usecase/create_chat_room.dart';
 import 'package:boilerplate_flutter/features/chat/domain/usecase/get_chat_room.dart';
-import 'package:boilerplate_flutter/features/chat/domain/usecase/get_user_info.dart';
+import 'package:boilerplate_flutter/features/chat/domain/usecase/get_users_info.dart';
 import 'package:boilerplate_flutter/features/chat/domain/usecase/send_message.dart';
 import 'package:boilerplate_flutter/features/chat/domain/usecase/get_messages_stream.dart';
 import 'package:boilerplate_flutter/features/chat/presentation/bloc/chat/chat_bloc.dart';
 import 'package:boilerplate_flutter/features/chat/presentation/bloc/message/message_bloc.dart';
+import 'package:boilerplate_flutter/features/chat/presentation/bloc/user/user_bloc.dart';
 import 'package:boilerplate_flutter/features/post/data/datasources/post_local_data_source.dart';
 import 'package:boilerplate_flutter/features/post/data/datasources/post_remote_data_source.dart';
 import 'package:boilerplate_flutter/features/post/data/repositories/post_repository_impl.dart';

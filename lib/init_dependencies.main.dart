@@ -172,23 +172,28 @@ void _initChat() {
       ),
     )
     ..registerFactory(
-      () => GetUserInfo(
+      () => GetUsersInfo(
         serviceLocator(),
       ),
     )
-
+    ..registerFactory(
+      () => UserBloc(
+        getUsersInfo: serviceLocator(),
+      ),
+    )
     // Bloc
     ..registerLazySingleton(
       () => ChatBloc(
         createChatRoom: serviceLocator(),
         getChatRooms: serviceLocator(),
+        userBloc: serviceLocator(),
       ),
     )
     ..registerLazySingleton(
       () => MessageBloc(
         getMessagesStream: serviceLocator(),
         sendMessage: serviceLocator(),
-        getUserInfo: serviceLocator(),
+        getUsersInfo: serviceLocator(),
       ),
     );
 }

@@ -1,9 +1,12 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:boilerplate_flutter/core/error/failures.dart';
 import 'package:boilerplate_flutter/features/chat/domain/entities/chat_room.dart';
 import 'package:boilerplate_flutter/features/chat/domain/usecase/create_chat_room.dart';
 import 'package:boilerplate_flutter/features/chat/domain/usecase/get_chat_room.dart';
+import 'package:boilerplate_flutter/features/chat/presentation/bloc/user/user_bloc.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:meta/meta.dart';
 
 part 'chat_event.dart';
@@ -12,6 +15,8 @@ part 'chat_state.dart';
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final CreateChatRoom _createChatRoom;
   final GetChatRooms _getChatRooms;
+  final UserBloc _userBloc;
+  StreamSubscription<Either<Failure, List<ChatRoom>>>? _chatRoomsSubscription;
 
   // final GetChatMessages _getChatMessages;
 
@@ -20,13 +25,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   ChatBloc({
     required CreateChatRoom createChatRoom,
     required GetChatRooms getChatRooms,
+    required UserBloc userBloc,
   })  : _createChatRoom = createChatRoom,
         _getChatRooms = getChatRooms,
+        _userBloc = userBloc,
         super(ChatInitial()) {
     on<ChatCreateRoom>(_onCreateRoom);
     on<ChatGetRooms>(_onGetRooms);
-
-    on<ChatGetRoomsRefresh>(_onGetRoomsRefresh);
   }
 
   void _onCreateRoom(ChatCreateRoom event, Emitter<ChatState> emit) async {
@@ -45,44 +50,43 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
         if (!emit.isDone) {
           _cachedRooms = null;
-          add(ChatGetRooms(userId: event.participantIds.first));
+          add(ChatGetRooms(viewerId: event.participantIds.first));
         }
       },
     );
   }
 
-  void _onGetRooms(ChatGetRooms event, Emitter<ChatState> emit) async {
-    if (_cachedRooms != null) {
-      emit(ChatGetRoomsSuccess(_cachedRooms!));
-      return;
-    }
+  Future<void> _onGetRooms(ChatGetRooms event, Emitter<ChatState> emit) async {
     emit(ChatGetRoomsLoading());
-    final res = await _getChatRooms(GetChatRoomsParams(userId: event.userId));
-    res.fold(
-      (failure) => emit(ChatGetRoomsFailure(failure.message)),
-      (rooms) {
-        _cachedRooms = rooms;
-        emit(ChatGetRoomsSuccess(rooms));
+
+    _chatRoomsSubscription?.cancel();
+
+    await emit.forEach(
+      _getChatRooms(GetChatRoomsParams(viewerId: event.viewerId)),
+      onData: (Either<Failure, List<ChatRoom>> failureOrRooms) {
+        print('failureOrRooms: $failureOrRooms');
+        return failureOrRooms.fold(
+          (failure) {
+            print('failure: $failure');
+            return ChatGetRoomsFailure(failure.message);
+          },
+          (rooms) {
+            _cachedRooms = rooms;
+            print('rooms: $rooms');
+            final allParticipantIds =
+                rooms.expand((room) => room.participantIds).toSet().toList();
+
+            print('allParticipantIds: $allParticipantIds');
+
+            return ChatGetRoomsSuccess(rooms);
+          },
+        );
       },
     );
   }
 
-  void _onGetRoomsRefresh(
-    ChatGetRoomsRefresh event,
-    Emitter<ChatState> emit,
-  ) async {
-    final currentRooms = _cachedRooms;
-    _cachedRooms = null;
-    emit(ChatGetRoomsRefreshLoading(currentRooms ?? []));
-    //wait 1 second
-    await Future.delayed(const Duration(seconds: 1));
-    final res = await _getChatRooms(GetChatRoomsParams(userId: event.userId));
-    res.fold(
-      (failure) => emit(ChatGetRoomsFailure(failure.message)),
-      (rooms) {
-        _cachedRooms = rooms;
-        emit(ChatGetRoomsSuccess(rooms));
-      },
-    );
+  Future<void> _loadMissingUsers(List<String> userIds) async {
+    print('loadMissingUsers: $userIds');
+    _userBloc.add(UserGetInfo(userIds: userIds));
   }
 }

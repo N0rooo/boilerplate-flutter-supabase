@@ -16,3 +16,7 @@ class SupabaseTables {
   static const String chatRooms = 'chat_rooms';
   static const String chatParticipants = 'chat_participants';
 }
+
+class SupabaseViews {
+  static const String userChatRooms = 'user_chat_rooms';
+}

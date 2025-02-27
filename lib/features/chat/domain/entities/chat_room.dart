@@ -5,6 +5,7 @@ class ChatRoom {
   final String name;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final String viewerId;
   final List<String> participantIds;
   final List<User>? participants;
 
@@ -13,6 +14,7 @@ class ChatRoom {
     required this.name,
     required this.createdAt,
     required this.updatedAt,
+    required this.viewerId,
     required this.participantIds,
     this.participants,
   });

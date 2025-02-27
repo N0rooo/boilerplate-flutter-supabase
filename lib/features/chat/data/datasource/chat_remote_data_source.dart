@@ -18,11 +18,13 @@ abstract interface class ChatRemoteDataSource {
     List<String> participantIds,
   );
 
-  Future<List<ChatRoomModel>> getChatRooms(String userId);
+  // Future<List<ChatRoomModel>> getChatRooms(String userId);
 
   Stream<List<MessageModel>> getMessages(String chatRoomId);
 
-  Future<UserModel> getUserInfo(String userId);
+  Stream<List<ChatRoomModel>> getChatRoomsStream(String userId);
+
+  Future<List<UserModel>> getUsersInfo(List<String> userIds);
 }
 
 class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
@@ -74,39 +76,55 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
     }
   }
 
+  // @override
+  // Future<List<ChatRoomModel>> getChatRooms(String userId) async {
+  //   try {
+  //     final rooms = await supabaseClient
+  //         .from(SupabaseTables.chatRooms)
+  //         .select('''
+  //         *,
+  //         chat_participants!inner(user_id),
+  //         participants:chat_participants(
+  //           profiles(*)
+  //         )
+  //       ''')
+  //         .eq('chat_participants.user_id', userId)
+  //         .order('updated_at', ascending: false);
+
+  //     return rooms.map((room) {
+  //       final participants = (room['participants'] as List)
+  //           .map((participant) => UserModel.fromJson(participant['profiles']))
+  //           .toList();
+
+  //       final participantIds = (room['chat_participants'] as List)
+  //           .map((p) => p['user_id'].toString())
+  //           .toList();
+
+  //       return ChatRoomModel(
+  //         id: room['id'],
+  //         name: room['name'],
+  //         createdAt: DateTime.parse(room['created_at']),
+  //         updatedAt: DateTime.parse(room['updated_at']),
+  //         participantIds: participantIds,
+  //         participants: participants,
+  //       );
+  //     }).toList();
+  //   } on PostgrestException catch (e) {
+  //     throw ServerException(e.message);
+  //   } catch (e) {
+  //     throw ServerException(e.toString());
+  //   }
+  // }
+
   @override
-  Future<List<ChatRoomModel>> getChatRooms(String userId) async {
+  Stream<List<ChatRoomModel>> getChatRoomsStream(String viewerId) {
     try {
-      final rooms = await supabaseClient
-          .from(SupabaseTables.chatRooms)
-          .select('''
-          *,
-          chat_participants!inner(user_id),
-          participants:chat_participants(
-            profiles(*)
-          )
-        ''')
-          .eq('chat_participants.user_id', userId)
-          .order('updated_at', ascending: false);
-
-      return rooms.map((room) {
-        final participants = (room['participants'] as List)
-            .map((participant) => UserModel.fromJson(participant['profiles']))
-            .toList();
-
-        final participantIds = (room['chat_participants'] as List)
-            .map((p) => p['user_id'].toString())
-            .toList();
-
-        return ChatRoomModel(
-          id: room['id'],
-          name: room['name'],
-          createdAt: DateTime.parse(room['created_at']),
-          updatedAt: DateTime.parse(room['updated_at']),
-          participantIds: participantIds,
-          participants: participants,
-        );
-      }).toList();
+      return supabaseClient
+          .from(SupabaseViews.userChatRooms)
+          .stream(primaryKey: ['id'])
+          .eq('viewer_id', viewerId)
+          .map((rooms) =>
+              rooms.map((room) => ChatRoomModel.fromJson(room)).toList());
     } on PostgrestException catch (e) {
       throw ServerException(e.message);
     } catch (e) {
@@ -131,15 +149,14 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
   }
 
   @override
-  Future<UserModel> getUserInfo(String userId) async {
+  Future<List<UserModel>> getUsersInfo(List<String> userIds) async {
     try {
       final userData = await supabaseClient
           .from(SupabaseTables.profiles)
           .select()
-          .eq('id', userId)
-          .single();
+          .inFilter('id', userIds);
 
-      return UserModel.fromJson(userData);
+      return userData.map((user) => UserModel.fromJson(user)).toList();
     } on PostgrestException catch (e) {
       throw ServerException(e.message);
     } catch (e) {

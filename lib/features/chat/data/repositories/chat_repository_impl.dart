@@ -27,14 +27,14 @@ class ChatRepositoryImpl implements ChatRepository {
   }
 
   @override
-  Future<Either<Failure, List<ChatRoom>>> getChatRooms(String userId) async {
+  Stream<Either<Failure, List<ChatRoom>>> getChatRooms(String viewerId) {
     try {
-      final result = await chatRemoteDataSource.getChatRooms(userId);
-      return right(result);
+      final result = chatRemoteDataSource.getChatRoomsStream(viewerId);
+      return result.map((rooms) => right(rooms));
     } on ServerException catch (e) {
-      return left(Failure(e.message));
+      return Stream.value(left(Failure(e.message)));
     } catch (e) {
-      return left(Failure(e.toString()));
+      return Stream.value(left(Failure(e.toString())));
     }
   }
 
@@ -63,9 +63,9 @@ class ChatRepositoryImpl implements ChatRepository {
   }
 
   @override
-  Future<Either<Failure, User>> getUserInfo(String userId) async {
+  Future<Either<Failure, List<User>>> getUsersInfo(List<String> userIds) async {
     try {
-      final result = await chatRemoteDataSource.getUserInfo(userId);
+      final result = await chatRemoteDataSource.getUsersInfo(userIds);
       return right(result);
     } on ServerException catch (e) {
       return left(Failure(e.message));
