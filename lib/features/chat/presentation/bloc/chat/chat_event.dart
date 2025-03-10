@@ -13,6 +13,12 @@ class ChatCreateRoom extends ChatEvent {
   });
 }
 
+final class ChatRoomsUpdated extends ChatEvent {
+  final List<ChatRoom> rooms;
+
+  ChatRoomsUpdated(this.rooms);
+}
+
 class ChatGetRooms extends ChatEvent {
   final String viewerId;
   ChatGetRooms({required this.viewerId});

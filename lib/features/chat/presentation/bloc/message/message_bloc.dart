@@ -9,6 +9,7 @@ import 'package:boilerplate_flutter/features/chat/domain/usecase/send_message.da
 import 'package:boilerplate_flutter/core/common/entities/user.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:meta/meta.dart';
+import 'package:boilerplate_flutter/features/chat/presentation/bloc/user/user_bloc.dart';
 
 part 'message_event.dart';
 part 'message_state.dart';
@@ -17,9 +18,9 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
   final GetMessagesStream _getMessagesStream;
   final SendMessage _sendMessage;
   final GetUsersInfo _getUsersInfo;
+  final UserBloc _userBloc;
   StreamSubscription<Either<Failure, List<Message>>>? _messagesSubscription;
-
-  final Map<String, User> _usersCache = {};
+  StreamSubscription<UserState>? _userStateSubscription;
 
   List<Message>? _pendingMessages;
 
@@ -27,13 +28,34 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
     required GetMessagesStream getMessagesStream,
     required SendMessage sendMessage,
     required GetUsersInfo getUsersInfo,
+    required UserBloc userBloc,
   })  : _getMessagesStream = getMessagesStream,
         _sendMessage = sendMessage,
         _getUsersInfo = getUsersInfo,
+        _userBloc = userBloc,
         super(MessageInitial()) {
     on<MessageGetMessages>(_onGetMessages);
     on<MessageSendMessage>(_onSendMessage);
-    on<MessageLoadUserInfo>(_onLoadUserInfo);
+    on<MessageMessagesUpdated>(_onMessagesUpdated);
+
+    _userStateSubscription = _userBloc.stream.listen((userState) {
+      if (userState is UserGetInfoSuccess && _pendingMessages != null) {
+        final allUsersLoaded = _pendingMessages!
+            .every((message) => _userBloc.hasUser(message.senderId));
+
+        if (allUsersLoaded) {
+          add(MessageMessagesUpdated(_pendingMessages!));
+          _pendingMessages = null;
+        }
+      }
+    });
+  }
+
+  void _onMessagesUpdated(
+    MessageMessagesUpdated event,
+    Emitter<MessageState> emit,
+  ) {
+    emit(MessageGetMessagesSuccess(event.messages, _userBloc.usersCache));
   }
 
   Future<void> _onGetMessages(
@@ -49,20 +71,19 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
           (failure) => MessageGetMessagesFailure(failure.message),
           (messages) {
             final List<String> missingUserIds = messages
-                .where((message) => !_usersCache.containsKey(message.senderId))
+                .where((message) => !_userBloc.hasUser(message.senderId))
                 .map((message) => message.senderId)
                 .toSet()
                 .toList();
 
             if (missingUserIds.isEmpty) {
-              return MessageGetMessagesSuccess(messages, _usersCache);
+              return MessageGetMessagesSuccess(
+                messages,
+                _userBloc.usersCache,
+              );
             } else {
-              // Still need to load user info, but we'll do it through events
-              for (final userId in missingUserIds) {
-                add(MessageLoadUserInfo(userId: userId));
-              }
               _pendingMessages = messages;
-              // Return loading state while we wait for user info
+              _userBloc.add(UserGetInfo(userIds: missingUserIds));
               return MessageGetMessagesLoading();
             }
           },
@@ -83,7 +104,7 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
       event.tempMessage,
       ...currentMessages
     ];
-    emit(MessageSendMessageLoading(updatedMessages, _usersCache));
+    emit(MessageSendMessageLoading(updatedMessages, _userBloc.usersCache));
     await Future.delayed(const Duration(milliseconds: 500));
 
     final res = await _sendMessage(SendMessageParams(
@@ -93,40 +114,15 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
     ));
     res.fold(
       (failure) => emit(MessageSendMessageFailure(failure.message)),
-      (message) =>
-          emit(MessageSendMessageSuccess(updatedMessages, _usersCache)),
-    );
-  }
-
-  Future<void> _onLoadUserInfo(
-    MessageLoadUserInfo event,
-    Emitter<MessageState> emit,
-  ) async {
-    final result =
-        await _getUsersInfo(GetUsersInfoParams(userIds: [event.userId]));
-
-    result.fold(
-      (failure) {},
-      (user) {
-        if (_pendingMessages != null) {
-          final allUsersLoaded = _pendingMessages!
-              .every((message) => _usersCache.containsKey(message.senderId));
-
-          if (allUsersLoaded) {
-            add(MessageMessagesUpdated(_pendingMessages!));
-            _pendingMessages = null;
-          }
-        } else if (state is MessageGetMessagesSuccess) {
-          final currentState = state as MessageGetMessagesSuccess;
-          emit(MessageGetMessagesSuccess(currentState.messages, _usersCache));
-        }
-      },
+      (message) => emit(
+          MessageSendMessageSuccess(updatedMessages, _userBloc.usersCache)),
     );
   }
 
   @override
   Future<void> close() {
     _messagesSubscription?.cancel();
+    _userStateSubscription?.cancel();
     return super.close();
   }
 }

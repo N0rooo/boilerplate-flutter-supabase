@@ -21,18 +21,6 @@ class ChatRoomPage extends StatefulWidget {
 
 class _ChatRoomPageState extends State<ChatRoomPage> {
   final messageController = TextEditingController();
-
-  // String get _participantNamesWithoutCurrentUser =>
-  //     widget.chatRoom.participants
-  //         ?.where((e) => e.id != widget.chatRoom.participantIds.first)
-  //         .map((e) => e.name)
-  //         .join(', ') ??
-  //     '';
-
-  // String get _chatTitle => widget.chatRoom.name.isEmpty
-  //     ? _participantNamesWithoutCurrentUser
-  //     : widget.chatRoom.name;
-
   @override
   void initState() {
     super.initState();
@@ -70,9 +58,17 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
     final currentUser =
         (context.read<AppUserCubit>().state as AppUserLoggedIn).user;
 
+    final chatRoomName = widget.chatRoom.name.isEmpty
+        ? widget.chatRoom.participants
+            ?.map((e) => e.name)
+            .where((name) => name != currentUser.name)
+            .toList()
+            .join(', ')
+        : widget.chatRoom.name;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.chatRoom.name),
+        title: Text(chatRoomName ?? ''),
       ),
       body: Column(
         children: [
@@ -127,17 +123,14 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                     final isCurrentUser = message.senderId == currentUser.id;
                     final isPending =
                         state is MessageSendMessageLoading && index == 0;
-                    final user = users[message.senderId];
                     return Opacity(
                       opacity: isPending ? 0.5 : 1.0,
-                      child: Container(
-                        child: ChatMessageBuble(
-                          user: user,
-                          message: message.content,
-                          isCurrentUser: isCurrentUser,
-                          showUserName:
-                              widget.chatRoom.participants!.length > 2,
-                        ),
+                      child: ChatMessageBuble(
+                        user: users[message.senderId],
+                        message: message.content,
+                        isCurrentUser: isCurrentUser,
+                        showUserName:
+                            (widget.chatRoom.participants?.length ?? 0) > 2,
                       ),
                     );
                   },

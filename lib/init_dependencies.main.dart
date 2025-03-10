@@ -194,6 +194,7 @@ void _initChat() {
         getMessagesStream: serviceLocator(),
         sendMessage: serviceLocator(),
         getUsersInfo: serviceLocator(),
+        userBloc: serviceLocator(),
       ),
     );
 }

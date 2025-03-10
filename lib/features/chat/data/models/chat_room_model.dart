@@ -29,23 +29,4 @@ class ChatRoomModel extends ChatRoom {
       participantIds: List<String>.from(map['participant_ids']),
     );
   }
-  ChatRoomModel copyWith({
-    String? id,
-    String? name,
-    DateTime? createdAt,
-    DateTime? updatedAt,
-    String? viewerId,
-    List<String>? participantsIds,
-    List<User>? participants,
-  }) {
-    return ChatRoomModel(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
-      viewerId: viewerId ?? this.viewerId,
-      participantIds: participantIds ?? this.participantIds,
-      participants: participants ?? this.participants,
-    );
-  }
 }

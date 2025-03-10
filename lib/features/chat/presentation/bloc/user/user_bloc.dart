@@ -10,6 +10,10 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   final GetUsersInfo _getUsersInfo;
   final Map<String, User> _usersCache = {};
 
+  Map<String, User> get usersCache => Map.unmodifiable(_usersCache);
+  bool hasUser(String userId) => _usersCache.containsKey(userId);
+  User? getUser(String userId) => _usersCache[userId];
+
   UserBloc({
     required GetUsersInfo getUsersInfo,
   })  : _getUsersInfo = getUsersInfo,

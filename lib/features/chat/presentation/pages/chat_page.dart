@@ -1,4 +1,5 @@
 import 'package:boilerplate_flutter/core/common/cubits/app_user/app_user_cubit.dart';
+import 'package:boilerplate_flutter/core/common/entities/user.dart';
 import 'package:boilerplate_flutter/core/common/widgets/loader.dart';
 import 'package:boilerplate_flutter/core/utils/show_snackbar.dart';
 import 'package:boilerplate_flutter/features/chat/domain/entities/chat_room.dart';
@@ -60,11 +61,8 @@ class _ChatPageState extends State<ChatPage> {
             return const Loader();
           }
 
-          final List<ChatRoom> rooms = state is ChatGetRoomsSuccess
-              ? state.rooms
-              : state is ChatGetRoomsRefreshLoading
-                  ? state.rooms
-                  : [];
+          final List<ChatRoom> rooms =
+              state is ChatGetRoomsSuccess ? state.rooms : [];
 
           return Column(
             children: [
@@ -91,16 +89,15 @@ class _ChatPageState extends State<ChatPage> {
                           final user = (context.read<AppUserCubit>().state
                                   as AppUserLoggedIn)
                               .user;
-                          final participantsNamesWithoutCurrentUser = room
-                                  .participants
+                          final participantsNames = room.participants
                                   ?.map((e) => e.name)
                                   .where((name) => name != user.name)
                                   .toList() ??
                               [];
+
                           return ChatRoomItem(
                             chatRoom: room,
-                            participantsNames:
-                                participantsNamesWithoutCurrentUser,
+                            participantsNames: participantsNames,
                             onTap: (room) {
                               Navigator.push(
                                 context,

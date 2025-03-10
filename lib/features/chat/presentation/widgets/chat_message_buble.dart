@@ -6,14 +6,14 @@ import 'package:intl/intl.dart';
 class ChatMessageBuble extends StatelessWidget {
   final String message;
   final bool isCurrentUser;
-  final User user;
+  final User? user;
   final bool showUserName;
 
   const ChatMessageBuble({
     super.key,
     required this.message,
     required this.isCurrentUser,
-    required this.user,
+    this.user,
     this.showUserName = true,
   });
 
@@ -35,11 +35,11 @@ class ChatMessageBuble extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (showUserName && !isCurrentUser)
+              if (showUserName && !isCurrentUser && user != null)
                 Padding(
                   padding: const EdgeInsets.only(right: 6),
                   child: Text(
-                    user.name,
+                    user!.name,
                     style: TextStyle(
                       color: isCurrentUser ? Colors.white : Colors.black,
                       fontSize: 12,

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:boilerplate_flutter/core/common/entities/user.dart';
 import 'package:boilerplate_flutter/core/error/failures.dart';
 import 'package:boilerplate_flutter/features/chat/domain/entities/chat_room.dart';
 import 'package:boilerplate_flutter/features/chat/domain/usecase/create_chat_room.dart';
@@ -17,10 +18,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final GetChatRooms _getChatRooms;
   final UserBloc _userBloc;
   StreamSubscription<Either<Failure, List<ChatRoom>>>? _chatRoomsSubscription;
+  StreamSubscription<UserState>? _userStateSubscription;
 
-  // final GetChatMessages _getChatMessages;
-
-  List<ChatRoom>? _cachedRooms;
+  List<ChatRoom>? _pendingRooms;
 
   ChatBloc({
     required CreateChatRoom createChatRoom,
@@ -32,6 +32,32 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         super(ChatInitial()) {
     on<ChatCreateRoom>(_onCreateRoom);
     on<ChatGetRooms>(_onGetRooms);
+    on<ChatRoomsUpdated>(_onRoomsUpdated);
+
+    _userStateSubscription = _userBloc.stream.listen((userState) {
+      if (userState is UserGetInfoSuccess && _pendingRooms != null) {
+        final allUsersLoaded = _pendingRooms!
+            .expand((room) => room.participantIds)
+            .every((userId) => _userBloc.hasUser(userId));
+
+        if (allUsersLoaded) {
+          final updatedRooms = _pendingRooms!.map((room) {
+            final participants = room.participantIds
+                .map((id) => _userBloc.getUser(id))
+                .whereType<User>()
+                .toList();
+            return room.withParticipants(participants);
+          }).toList();
+
+          add(ChatRoomsUpdated(updatedRooms));
+          _pendingRooms = null;
+        }
+      }
+    });
+  }
+
+  void _onRoomsUpdated(ChatRoomsUpdated event, Emitter<ChatState> emit) {
+    emit(ChatGetRoomsSuccess(event.rooms));
   }
 
   void _onCreateRoom(ChatCreateRoom event, Emitter<ChatState> emit) async {
@@ -49,7 +75,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         emit(ChatCreateRoomSuccess(room));
 
         if (!emit.isDone) {
-          _cachedRooms = null;
+          _pendingRooms = null;
           add(ChatGetRooms(viewerId: event.participantIds.first));
         }
       },
@@ -64,29 +90,40 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     await emit.forEach(
       _getChatRooms(GetChatRoomsParams(viewerId: event.viewerId)),
       onData: (Either<Failure, List<ChatRoom>> failureOrRooms) {
-        print('failureOrRooms: $failureOrRooms');
         return failureOrRooms.fold(
-          (failure) {
-            print('failure: $failure');
-            return ChatGetRoomsFailure(failure.message);
-          },
+          (failure) => ChatGetRoomsFailure(failure.message),
           (rooms) {
-            _cachedRooms = rooms;
-            print('rooms: $rooms');
             final allParticipantIds =
                 rooms.expand((room) => room.participantIds).toSet().toList();
 
-            print('allParticipantIds: $allParticipantIds');
+            final missingUserIds = allParticipantIds
+                .where((userId) => !_userBloc.hasUser(userId))
+                .toList();
 
-            return ChatGetRoomsSuccess(rooms);
+            if (missingUserIds.isEmpty) {
+              final updatedRooms = rooms.map((room) {
+                final participants = room.participantIds
+                    .map((id) => _userBloc.getUser(id))
+                    .whereType<User>()
+                    .toList();
+                return room.withParticipants(participants);
+              }).toList();
+              return ChatGetRoomsSuccess(updatedRooms);
+            } else {
+              _pendingRooms = rooms;
+              _userBloc.add(UserGetInfo(userIds: missingUserIds));
+              return ChatGetRoomsLoading();
+            }
           },
         );
       },
     );
   }
 
-  Future<void> _loadMissingUsers(List<String> userIds) async {
-    print('loadMissingUsers: $userIds');
-    _userBloc.add(UserGetInfo(userIds: userIds));
+  @override
+  Future<void> close() {
+    _chatRoomsSubscription?.cancel();
+    _userStateSubscription?.cancel();
+    return super.close();
   }
 }

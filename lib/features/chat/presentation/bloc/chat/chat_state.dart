@@ -39,4 +39,3 @@ final class ChatGetRoomsFailure extends ChatState {
 }
 
 // Get messages states
-
