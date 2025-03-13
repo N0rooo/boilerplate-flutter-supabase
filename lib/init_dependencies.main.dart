@@ -7,6 +7,8 @@ Future<void> initDependencies() async {
   _initPost();
   _initCore();
   _initChat();
+  _initFilters();
+  ();
   final supabase = await Supabase.initialize(
     url: AppSecrets.supabaseUrl,
     anonKey: AppSecrets.supabaseAnonKey,
@@ -86,12 +88,18 @@ void _initAuth() {
         serviceLocator(),
       ),
     )
+    ..registerFactory(
+      () => UserLogout(
+        serviceLocator(),
+      ),
+    )
     // Bloc
     ..registerLazySingleton(
       () => AuthBloc(
         userSignUp: serviceLocator(),
         userLogin: serviceLocator(),
         currentUser: serviceLocator(),
+        userLogout: serviceLocator(),
         appUserCubit: serviceLocator(),
       ),
     );
@@ -197,4 +205,37 @@ void _initChat() {
         userBloc: serviceLocator(),
       ),
     );
+}
+
+void _initFilters() {
+  serviceLocator
+    ..registerFactory<CameraRepository>(
+      () => CameraRepositoryImpl(),
+    )
+    ..registerFactory<FilterRepository>(
+      () => FilterRepositoryImpl(),
+    )
+    ..registerFactory(
+      () => GetFilterPresets(
+        filterRepository: serviceLocator(),
+      ),
+    )
+    ..registerFactory(
+      () => SaveCustomFilter(
+        filterRepository: serviceLocator(),
+      ),
+    )
+    // Bloc
+    ..registerLazySingleton(
+      () => FilterBloc(
+        getFilterPresets: serviceLocator(),
+        saveCustomFilter: serviceLocator(),
+      ),
+    );
+
+  serviceLocator.registerLazySingleton(
+    () => CameraBloc(
+      serviceLocator(),
+    ),
+  );
 }

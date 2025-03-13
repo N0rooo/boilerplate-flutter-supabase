@@ -55,7 +55,6 @@ class _CreateChatRoomPageState extends State<CreateChatRoomPage>
   void createChatRoom(List<String> participantIds) {
     final currentUserId =
         (context.read<AppUserCubit>().state as AppUserLoggedIn).user.id;
-
     context.read<ChatBloc>().add(ChatCreateRoom(
           name: '',
           participantIds: [currentUserId, ...participantIds],

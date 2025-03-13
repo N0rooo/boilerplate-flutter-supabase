@@ -20,3 +20,28 @@ class SupabaseTables {
 class SupabaseViews {
   static const String userChatRooms = 'user_chat_rooms';
 }
+
+class FilterDefaultMatrix {
+  static const List<double> defaultMatrix = [
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+  ];
+}

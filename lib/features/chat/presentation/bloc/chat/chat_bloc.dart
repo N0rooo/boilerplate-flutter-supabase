@@ -62,6 +62,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   void _onCreateRoom(ChatCreateRoom event, Emitter<ChatState> emit) async {
     emit(ChatCreateRoomLoading());
+
+    print(event.participantIds);
     final res = await _createChatRoom(CreateChatRoomParams(
       name: event.name,
       participantIds: event.participantIds,

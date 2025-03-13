@@ -20,9 +20,10 @@ class ChatRoomModel extends ChatRoom {
   }
 
   factory ChatRoomModel.fromJson(Map<String, dynamic> map) {
+    print(map);
     return ChatRoomModel(
       id: map['id'],
-      name: map['name'],
+      name: map['name'] ?? 'Unknown',
       createdAt: DateTime.parse(map['created_at']),
       updatedAt: DateTime.parse(map['updated_at']),
       viewerId: map['viewer_id'],

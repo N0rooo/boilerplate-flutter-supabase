@@ -6,6 +6,8 @@ import 'package:boilerplate_flutter/features/auth/presentation/pages/login_page.
 import 'package:boilerplate_flutter/core/blocs/user_search/user_search_bloc.dart';
 import 'package:boilerplate_flutter/features/chat/presentation/bloc/chat/chat_bloc.dart';
 import 'package:boilerplate_flutter/features/chat/presentation/bloc/message/message_bloc.dart';
+import 'package:boilerplate_flutter/features/filters/presentation/blocs/camera/camera_bloc.dart';
+import 'package:boilerplate_flutter/features/filters/presentation/blocs/filter/filter_bloc.dart';
 import 'package:boilerplate_flutter/features/post/presentation/bloc/post_bloc.dart';
 import 'package:boilerplate_flutter/init_dependencies.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +35,12 @@ Future<void> main() async {
       ),
       BlocProvider(
         create: (_) => serviceLocator<MessageBloc>(),
+      ),
+      BlocProvider(
+        create: (_) => serviceLocator<FilterBloc>(),
+      ),
+      BlocProvider(
+        create: (_) => serviceLocator<CameraBloc>(),
       ),
     ],
     child: MyApp(),

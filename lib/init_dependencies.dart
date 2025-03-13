@@ -11,6 +11,7 @@ import 'package:boilerplate_flutter/features/auth/data/repositories/auth_reposit
 import 'package:boilerplate_flutter/features/auth/domain/repository/auth_repository.dart';
 import 'package:boilerplate_flutter/features/auth/domain/usecases/current_user.dart';
 import 'package:boilerplate_flutter/features/auth/domain/usecases/user_login.dart';
+import 'package:boilerplate_flutter/features/auth/domain/usecases/user_logout.dart';
 import 'package:boilerplate_flutter/features/auth/domain/usecases/user_sign_up.dart';
 import 'package:boilerplate_flutter/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:boilerplate_flutter/features/chat/data/datasource/chat_remote_data_source.dart';
@@ -24,6 +25,14 @@ import 'package:boilerplate_flutter/features/chat/domain/usecase/get_messages_st
 import 'package:boilerplate_flutter/features/chat/presentation/bloc/chat/chat_bloc.dart';
 import 'package:boilerplate_flutter/features/chat/presentation/bloc/message/message_bloc.dart';
 import 'package:boilerplate_flutter/features/chat/presentation/bloc/user/user_bloc.dart';
+import 'package:boilerplate_flutter/features/filters/data/repositories/camera_repository_impl.dart';
+import 'package:boilerplate_flutter/features/filters/data/repositories/filter_repository_impl.dart';
+import 'package:boilerplate_flutter/features/filters/domain/repositories/camera_repository.dart';
+import 'package:boilerplate_flutter/features/filters/domain/repositories/filter_repository.dart';
+import 'package:boilerplate_flutter/features/filters/domain/usecases/get_filter_presets.dart';
+import 'package:boilerplate_flutter/features/filters/domain/usecases/save_custom_filter.dart';
+import 'package:boilerplate_flutter/features/filters/presentation/blocs/camera/camera_bloc.dart';
+import 'package:boilerplate_flutter/features/filters/presentation/blocs/filter/filter_bloc.dart';
 import 'package:boilerplate_flutter/features/post/data/datasources/post_local_data_source.dart';
 import 'package:boilerplate_flutter/features/post/data/datasources/post_remote_data_source.dart';
 import 'package:boilerplate_flutter/features/post/data/repositories/post_repository_impl.dart';

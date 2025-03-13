@@ -67,11 +67,12 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
       }).single();
 
       final chatRoom = ChatRoomModel.fromJson(roomData);
-
       return chatRoom;
     } on PostgrestException catch (e) {
+      print(e.message);
       throw ServerException(e.message);
     } catch (e) {
+      print(e.toString());
       throw ServerException(e.toString());
     }
   }
