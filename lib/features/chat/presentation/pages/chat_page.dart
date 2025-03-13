@@ -33,6 +33,12 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
+  void _refreshChats() {
+    final userId =
+        (context.read<AppUserCubit>().state as AppUserLoggedIn).user.id;
+    context.read<ChatBloc>().add(ChatGetRooms(viewerId: userId));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,35 +86,48 @@ class _ChatPageState extends State<ChatPage> {
                   ),
                 ),
               Expanded(
-                child: rooms.isEmpty
-                    ? const Center(child: Text('No chats'))
-                    : ListView.builder(
-                        itemCount: rooms.length,
-                        itemBuilder: (context, index) {
-                          final room = rooms[index];
-                          final user = (context.read<AppUserCubit>().state
-                                  as AppUserLoggedIn)
-                              .user;
-                          final participantsNames = room.participants
-                                  ?.map((e) => e.name)
-                                  .where((name) => name != user.name)
-                                  .toList() ??
-                              [];
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    _refreshChats();
+                  },
+                  child: rooms.isEmpty
+                      ? ListView.builder(
+                          itemCount: 1,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 40),
+                              child: const Center(child: Text('No chats')),
+                            );
+                          },
+                        )
+                      : ListView.builder(
+                          itemCount: rooms.length,
+                          itemBuilder: (context, index) {
+                            final room = rooms[index];
+                            final user = (context.read<AppUserCubit>().state
+                                    as AppUserLoggedIn)
+                                .user;
+                            final participantsNames = room.participants
+                                    ?.map((e) => e.name)
+                                    .where((name) => name != user.name)
+                                    .toList() ??
+                                [];
 
-                          return ChatRoomItem(
-                            chatRoom: room,
-                            participantsNames: participantsNames,
-                            onTap: (room) {
-                              Navigator.push(
-                                context,
-                                ChatRoomPage.route(room),
-                              ).then((_) {
-                                _fetchChats();
-                              });
-                            },
-                          );
-                        },
-                      ),
+                            return ChatRoomItem(
+                              chatRoom: room,
+                              participantsNames: participantsNames,
+                              onTap: (room) {
+                                Navigator.push(
+                                  context,
+                                  ChatRoomPage.route(room),
+                                ).then((_) {
+                                  _fetchChats();
+                                });
+                              },
+                            );
+                          },
+                        ),
+                ),
               ),
             ],
           );

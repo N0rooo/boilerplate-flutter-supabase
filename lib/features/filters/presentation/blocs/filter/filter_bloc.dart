@@ -1,8 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:boilerplate_flutter/core/constants/constants.dart';
 import 'package:boilerplate_flutter/features/filters/domain/entities/color_filter_preset.dart';
+import 'package:boilerplate_flutter/features/filters/domain/usecases/delete_custom_filter.dart';
 import 'package:boilerplate_flutter/features/filters/domain/usecases/get_filter_presets.dart';
 import 'package:boilerplate_flutter/features/filters/domain/usecases/save_custom_filter.dart';
+import 'package:boilerplate_flutter/features/filters/domain/usecases/update_custom_filter.dart';
 import 'package:meta/meta.dart';
 
 part 'filter_event.dart';
@@ -11,14 +13,22 @@ part 'filter_state.dart';
 class FilterBloc extends Bloc<FilterEvent, FilterState> {
   final GetFilterPresets getFilterPresets;
   final SaveCustomFilter saveCustomFilter;
+  final DeleteCustomFilter deleteCustomFilter;
+  final UpdateCustomFilter updateCustomFilter;
 
-  FilterBloc({required this.getFilterPresets, required this.saveCustomFilter})
+  FilterBloc(
+      {required this.getFilterPresets,
+      required this.saveCustomFilter,
+      required this.deleteCustomFilter,
+      required this.updateCustomFilter})
       : super(FilterInitial()) {
     on<FilterLoad>(_onLoad);
     on<FilterSelect>(_onSelect);
     on<FilterSetIntensity>(_onSetIntensity);
     on<FilterAddCustom>(_onAddCustom);
     on<FilterToggle>(_onToggle);
+    on<FilterDelete>(_onDelete);
+    on<FilterUpdate>(_onUpdate);
   }
 
   Future<void> _onLoad(FilterLoad event, Emitter<FilterState> emit) async {
@@ -53,14 +63,23 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
     final currentFilter = state.filters[state.selectedFilterIndex];
     final filterMatrix = currentFilter.matrix;
 
-    final identityMatrix = FilterDefaultMatrix.defaultMatrix;
+    const identityMatrix = FilterDefaultMatrix.defaultMatrix;
 
-    // Interpolate between identity and filter matrix based on intensity
     List<double> result = [];
     for (int i = 0; i < 20; i++) {
       result.add(
           identityMatrix[i] * (1 - intensity) + filterMatrix[i] * intensity);
     }
     return result;
+  }
+
+  void _onDelete(FilterDelete event, Emitter<FilterState> emit) async {
+    await deleteCustomFilter(event.filter);
+    add(FilterLoad());
+  }
+
+  void _onUpdate(FilterUpdate event, Emitter<FilterState> emit) async {
+    await updateCustomFilter(event.filter);
+    add(FilterLoad());
   }
 }

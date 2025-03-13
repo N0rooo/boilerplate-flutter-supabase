@@ -8,8 +8,13 @@ class ImagePreviewPage extends StatelessWidget {
   final String imagePath;
   const ImagePreviewPage({Key? key, required this.imagePath}) : super(key: key);
 
-  Future<void> _saveImage() async {
+  Future<void> _saveImage(BuildContext context) async {
     final result = await ImageGallerySaver.saveFile(imagePath);
+    if (result['isSuccess']) {
+      showSnackBar(context, 'Image saved to gallery');
+    } else {
+      showSnackBar(context, 'Failed to save image');
+    }
   }
 
   @override
@@ -17,18 +22,17 @@ class ImagePreviewPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Image Preview'),
+        actions: [
+          IconButton(
+            onPressed: () => _saveImage(context),
+            icon: const Icon(Icons.save),
+          ),
+        ],
       ),
       body: Column(
         children: [
           Expanded(
             child: Image.file(File(imagePath)),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              onPressed: _saveImage,
-              child: const Text('Save to Gallery'),
-            ),
           ),
         ],
       ),

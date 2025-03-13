@@ -140,6 +140,85 @@ class FilterRepositoryImpl implements FilterRepository {
           0,
         ],
       ),
+      ColorFilterPreset(
+        id: 'red_vision',
+        name: 'Red Vision',
+        matrix: [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+        ],
+      ),
+      ColorFilterPreset(
+        id: 'high_contrast_bw',
+        name: 'High Contrast B&W',
+        matrix: [
+          1.5,
+          0,
+          0,
+          0,
+          -0.5,
+          1.5,
+          0,
+          0,
+          0,
+          -0.5,
+          1.5,
+          0,
+          0,
+          0,
+          -0.5,
+          0,
+          0,
+          0,
+          1,
+          0,
+        ],
+      ),
+
+      ColorFilterPreset(
+        id: 'high_brightness_bw',
+        name: 'High Brightness B&W',
+        matrix: [
+          0.3,
+          0.59,
+          0.11,
+          0,
+          50,
+          0.3,
+          0.59,
+          0.11,
+          0,
+          50,
+          0.3,
+          0.59,
+          0.11,
+          0,
+          50,
+          0,
+          0,
+          0,
+          1,
+          0,
+        ],
+      ),
       // Add more preset filters as desired
     ];
   }
@@ -185,5 +264,49 @@ class FilterRepositoryImpl implements FilterRepository {
         matrix: List<double>.from(data['matrix']),
       );
     }).toList();
+  }
+
+  @override
+  Future<void> updateCustomFilter(ColorFilterPreset filter) async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<ColorFilterPreset> existingFilters =
+        await getSavedCustomFilters();
+
+    final index = existingFilters.indexWhere((f) => f.id == filter.id);
+    if (index != -1) {
+      existingFilters[index] = filter;
+    }
+
+    final List<String> jsonList = existingFilters
+        .map((filter) => jsonEncode({
+              'id': filter.id,
+              'name': filter.name,
+              'matrix': filter.matrix,
+            }))
+        .toList();
+
+    await prefs.setStringList(_customFiltersKey, jsonList);
+  }
+
+  @override
+  Future<void> deleteCustomFilter(ColorFilterPreset filter) async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<ColorFilterPreset> existingFilters =
+        await getSavedCustomFilters();
+
+    final index = existingFilters.indexWhere((f) => f.id == filter.id);
+    if (index != -1) {
+      existingFilters.removeAt(index);
+    }
+
+    final List<String> jsonList = existingFilters
+        .map((filter) => jsonEncode({
+              'id': filter.id,
+              'name': filter.name,
+              'matrix': filter.matrix,
+            }))
+        .toList();
+
+    await prefs.setStringList(_customFiltersKey, jsonList);
   }
 }

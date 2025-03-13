@@ -29,8 +29,14 @@ import 'package:boilerplate_flutter/features/filters/data/repositories/camera_re
 import 'package:boilerplate_flutter/features/filters/data/repositories/filter_repository_impl.dart';
 import 'package:boilerplate_flutter/features/filters/domain/repositories/camera_repository.dart';
 import 'package:boilerplate_flutter/features/filters/domain/repositories/filter_repository.dart';
+import 'package:boilerplate_flutter/features/filters/domain/usecases/delete_custom_filter.dart';
+import 'package:boilerplate_flutter/features/filters/domain/usecases/dispose_cameras.dart';
+import 'package:boilerplate_flutter/features/filters/domain/usecases/get_available_cameras.dart';
 import 'package:boilerplate_flutter/features/filters/domain/usecases/get_filter_presets.dart';
+import 'package:boilerplate_flutter/features/filters/domain/usecases/initialize_cameras.dart';
 import 'package:boilerplate_flutter/features/filters/domain/usecases/save_custom_filter.dart';
+import 'package:boilerplate_flutter/features/filters/domain/usecases/take_picture.dart';
+import 'package:boilerplate_flutter/features/filters/domain/usecases/update_custom_filter.dart';
 import 'package:boilerplate_flutter/features/filters/presentation/blocs/camera/camera_bloc.dart';
 import 'package:boilerplate_flutter/features/filters/presentation/blocs/filter/filter_bloc.dart';
 import 'package:boilerplate_flutter/features/post/data/datasources/post_local_data_source.dart';

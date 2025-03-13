@@ -18,6 +18,20 @@ class FilterSetIntensity extends FilterEvent {
 
 class FilterToggle extends FilterEvent {}
 
+class FilterDelete extends FilterEvent {
+  final ColorFilterPreset filter;
+
+  FilterDelete(this.filter);
+}
+
+class FilterUpdate extends FilterEvent {
+  final ColorFilterPreset filter;
+
+  FilterUpdate(this.filter);
+}
+
+class FilterToggleCustom extends FilterEvent {}
+
 class FilterAddCustom extends FilterEvent {
   final ColorFilterPreset filter;
 

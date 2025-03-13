@@ -17,12 +17,13 @@ class CameraRepositoryImpl implements CameraRepository {
   }
 
   @override
-  Future<void> initializeCamera(CameraDescription camera) async {
+  Future<CameraController> initializeCamera(CameraDescription camera) async {
     _cameraController = CameraController(
       camera,
       ResolutionPreset.high,
     );
     await _cameraController!.initialize();
+    return _cameraController!;
   }
 
   @override
@@ -33,7 +34,23 @@ class CameraRepositoryImpl implements CameraRepository {
 
   @override
   Future<void> disposeCamera() async {
-    await _cameraController!.dispose();
-    _cameraController = null;
+    if (_cameraController == null) {
+      print('No camera to dispose.');
+      return;
+    }
+
+    if (!_cameraController!.value.isInitialized) {
+      print('Camera controller is not initialized.');
+      return;
+    }
+
+    try {
+      await _cameraController!.dispose();
+      _cameraController = null;
+      print('Camera disposed successfully.');
+    } catch (e) {
+      print('Error disposing camera: $e');
+      throw Exception('Failed to dispose camera');
+    }
   }
 }

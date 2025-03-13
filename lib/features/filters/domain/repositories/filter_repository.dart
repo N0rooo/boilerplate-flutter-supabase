@@ -5,4 +5,6 @@ abstract class FilterRepository {
   Future<List<ColorFilterPreset>> getPresetFilters();
   Future<void> saveCustomFilter(ColorFilterPreset filter);
   Future<List<ColorFilterPreset>> getSavedCustomFilters();
+  Future<void> updateCustomFilter(ColorFilterPreset filter);
+  Future<void> deleteCustomFilter(ColorFilterPreset filter);
 }

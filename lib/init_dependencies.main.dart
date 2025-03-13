@@ -8,6 +8,7 @@ Future<void> initDependencies() async {
   _initCore();
   _initChat();
   _initFilters();
+  _initCamera();
   ();
   final supabase = await Supabase.initialize(
     url: AppSecrets.supabaseUrl,
@@ -207,11 +208,43 @@ void _initChat() {
     );
 }
 
-void _initFilters() {
+void _initCamera() {
   serviceLocator
     ..registerFactory<CameraRepository>(
       () => CameraRepositoryImpl(),
     )
+    ..registerFactory<GetAvailableCameras>(
+      () => GetAvailableCameras(
+        cameraRepository: serviceLocator(),
+      ),
+    )
+    ..registerFactory<InitializeCameras>(
+      () => InitializeCameras(
+        cameraRepository: serviceLocator(),
+      ),
+    )
+    ..registerFactory<DisposeCameras>(
+      () => DisposeCameras(
+        cameraRepository: serviceLocator(),
+      ),
+    )
+    ..registerFactory<TakePicture>(
+      () => TakePicture(
+        cameraRepository: serviceLocator(),
+      ),
+    )
+    ..registerLazySingleton(
+      () => CameraBloc(
+        getAvailableCameras: serviceLocator(),
+        initializeCameras: serviceLocator(),
+        disposeCameras: serviceLocator(),
+        takePicture: serviceLocator(),
+      ),
+    );
+}
+
+void _initFilters() {
+  serviceLocator
     ..registerFactory<FilterRepository>(
       () => FilterRepositoryImpl(),
     )
@@ -225,17 +258,23 @@ void _initFilters() {
         filterRepository: serviceLocator(),
       ),
     )
+    ..registerFactory(
+      () => DeleteCustomFilter(
+        filterRepository: serviceLocator(),
+      ),
+    )
+    ..registerFactory(
+      () => UpdateCustomFilter(
+        filterRepository: serviceLocator(),
+      ),
+    )
     // Bloc
     ..registerLazySingleton(
       () => FilterBloc(
         getFilterPresets: serviceLocator(),
         saveCustomFilter: serviceLocator(),
+        deleteCustomFilter: serviceLocator(),
+        updateCustomFilter: serviceLocator(),
       ),
     );
-
-  serviceLocator.registerLazySingleton(
-    () => CameraBloc(
-      serviceLocator(),
-    ),
-  );
 }

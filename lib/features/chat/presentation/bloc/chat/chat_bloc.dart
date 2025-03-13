@@ -35,6 +35,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<ChatRoomsUpdated>(_onRoomsUpdated);
 
     _userStateSubscription = _userBloc.stream.listen((userState) {
+      print('User state: $userState');
       if (userState is UserGetInfoSuccess && _pendingRooms != null) {
         final allUsersLoaded = _pendingRooms!
             .expand((room) => room.participantIds)

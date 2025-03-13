@@ -4,8 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:camera/camera.dart';
 import 'package:boilerplate_flutter/features/filters/presentation/blocs/camera/camera_bloc.dart';
 import 'package:boilerplate_flutter/features/filters/presentation/blocs/filter/filter_bloc.dart';
-import 'package:boilerplate_flutter/features/filters/presentation/widgets/custom_filter_dialog.dart';
-import 'package:boilerplate_flutter/features/filters/presentation/pages/image_preview_page.dart';
 
 class CameraPage extends StatefulWidget {
   const CameraPage({super.key});
