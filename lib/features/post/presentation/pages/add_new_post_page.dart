@@ -119,7 +119,7 @@ class _AddNewPostPageState extends State<AddNewPostPage> {
                         : InkWell(
                             onTap: () => selectImage(),
                             child: DottedBorder(
-                              color: AppPallete.borderColor,
+                              color: AppPalette.borderColor,
                               dashPattern: [10, 4],
                               radius: const Radius.circular(10),
                               borderType: BorderType.RRect,
@@ -163,13 +163,13 @@ class _AddNewPostPageState extends State<AddNewPostPage> {
                                 child: Chip(
                                   color: selectedTopics.contains(topic)
                                       ? const WidgetStatePropertyAll(
-                                          AppPallete.gradient1)
+                                          AppPalette.gradient1)
                                       : null,
                                   label: Text(topic),
                                   side: selectedTopics.contains(topic)
                                       ? null
                                       : const BorderSide(
-                                          color: AppPallete.borderColor,
+                                          color: AppPalette.borderColor,
                                         ),
                                 ),
                               ),

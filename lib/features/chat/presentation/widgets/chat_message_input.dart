@@ -31,11 +31,11 @@ class ChatMessageInput extends StatelessWidget {
           const SizedBox(width: 10.0),
           Container(
             decoration: BoxDecoration(
-              color: AppPallete.gradient2,
+              color: AppPalette.gradient2,
               borderRadius: BorderRadius.circular(30),
               boxShadow: [
                 BoxShadow(
-                  color: AppPallete.gradient2.withOpacity(0.5),
+                  color: AppPalette.gradient2.withOpacity(0.5),
                   spreadRadius: 1,
                   blurRadius: 5,
                 ),

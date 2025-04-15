@@ -16,7 +16,7 @@ class ShowFilterButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
         decoration: BoxDecoration(
-          color: AppPallete.gradient1,
+          color: AppPalette.gradient1,
           borderRadius: BorderRadius.circular(30),
         ),
         child: Text(

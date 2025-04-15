@@ -104,10 +104,10 @@ class _PostPageState extends State<PostPage> {
                     child: PostCard(
                       post: post,
                       color: index % 3 == 0
-                          ? AppPallete.gradient1
+                          ? AppPalette.gradient1
                           : index % 3 == 1
-                              ? AppPallete.gradient2
-                              : AppPallete.gradient3,
+                              ? AppPalette.gradient2
+                              : AppPalette.gradient3,
                     ),
                   );
                 },

@@ -53,7 +53,7 @@ class FilterSelection extends StatelessWidget {
         width: 80,
         margin: const EdgeInsets.all(8),
         decoration: const BoxDecoration(
-          color: AppPallete.gradient1,
+          color: AppPalette.gradient1,
         ),
         alignment: Alignment.center,
         child: const Icon(
@@ -111,8 +111,8 @@ class FilterSelection extends StatelessWidget {
           decoration: BoxDecoration(
             border: Border.all(
               color: selectedFilterIndex == index
-                  ? AppPallete.gradient1
-                  : AppPallete.whiteColor,
+                  ? AppPalette.gradient1
+                  : AppPalette.whiteColor,
               width: selectedFilterIndex == index ? 3 : 1,
             ),
           ),
@@ -138,7 +138,7 @@ class FilterSelection extends StatelessWidget {
                     filters[index].name,
                     textAlign: TextAlign.center,
                     style: const TextStyle(
-                      color: AppPallete.whiteColor,
+                      color: AppPalette.whiteColor,
                       fontSize: 12,
                     ),
                   ),

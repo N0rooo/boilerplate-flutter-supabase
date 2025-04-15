@@ -135,7 +135,7 @@ class _CameraViewState extends State<CameraView> {
                       const Text(
                         'Intensity:',
                         style: TextStyle(
-                          color: AppPallete.whiteColor,
+                          color: AppPalette.whiteColor,
                         ),
                       ),
                       Expanded(

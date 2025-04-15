@@ -29,7 +29,7 @@ class ChatMessageBuble extends StatelessWidget {
           ),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(
-            color: isCurrentUser ? AppPallete.gradient2 : Colors.grey[200],
+            color: isCurrentUser ? AppPalette.gradient2 : Colors.grey[200],
             borderRadius: BorderRadius.circular(12),
           ),
           child: Column(

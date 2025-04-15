@@ -3,6 +3,11 @@ part of 'init_dependencies.dart';
 final serviceLocator = GetIt.instance;
 
 Future<void> initDependencies() async {
+  final prefs = await SharedPreferences.getInstance();
+  serviceLocator.registerSingleton<SharedPreferences>(prefs);
+
+  await _initTheme();
+
   _initAuth();
   _initPost();
   _initCore();
@@ -30,6 +35,39 @@ Future<void> initDependencies() async {
   serviceLocator.registerFactory<ConnectionChecker>(() => ConnectionCheckerImpl(
         serviceLocator(),
       ));
+}
+
+Future<void> _initTheme() async {
+  // Register ThemeLocalDatasource
+  final themeLocalDatasource = ThemeLocalDatasource(
+    sharedPreferences: serviceLocator<SharedPreferences>(),
+  );
+  serviceLocator.registerSingleton<ThemeLocalDatasource>(themeLocalDatasource);
+
+  // Register ThemeRepository
+  final themeRepository = ThemeRepositoryImpl(
+    themeLocalDatasource: serviceLocator<ThemeLocalDatasource>(),
+  );
+  serviceLocator.registerSingleton<ThemeRepositoryImpl>(themeRepository);
+
+  // Register UseCases
+  final getThemeUseCase = GetThemeUseCase(
+    themeRepository: serviceLocator<ThemeRepositoryImpl>(),
+  );
+  serviceLocator.registerLazySingleton(() => getThemeUseCase);
+
+  final saveThemeUseCase = SaveThemeUseCase(
+    themeRepository: serviceLocator<ThemeRepositoryImpl>(),
+  );
+  serviceLocator.registerLazySingleton(() => saveThemeUseCase);
+
+  // Register ThemeBloc
+  serviceLocator.registerFactory(
+    () => ThemeBloc(
+      getThemeUseCase: serviceLocator(),
+      saveThemeUseCase: serviceLocator(),
+    ),
+  );
 }
 
 void _initCore() {

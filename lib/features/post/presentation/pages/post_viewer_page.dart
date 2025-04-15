@@ -43,7 +43,7 @@ class PostViewerPage extends StatelessWidget {
                 Text(
                   '${formatDateBydMMMYYYY(post.updatedAt)} . ${calculateReadingTime(post.content)} min',
                   style: const TextStyle(
-                    color: AppPallete.greyColor,
+                    color: AppPalette.greyColor,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),

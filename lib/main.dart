@@ -1,5 +1,7 @@
 import 'package:boilerplate_flutter/core/common/cubits/app_user/app_user_cubit.dart';
 import 'package:boilerplate_flutter/core/common/screens/main_screen.dart';
+import 'package:boilerplate_flutter/core/theme/domain/entity/theme_entity.dart';
+import 'package:boilerplate_flutter/core/theme/presentation/bloc/theme_bloc.dart';
 import 'package:boilerplate_flutter/core/theme/theme.dart';
 import 'package:boilerplate_flutter/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:boilerplate_flutter/features/auth/presentation/pages/login_page.dart';
@@ -23,6 +25,9 @@ Future<void> main() async {
       ),
       BlocProvider(
         create: (_) => serviceLocator<AuthBloc>(),
+      ),
+      BlocProvider(
+        create: (_) => serviceLocator<ThemeBloc>()..add(GetThemeEvent()),
       ),
       BlocProvider(
         create: (_) => serviceLocator<PostBloc>(),
@@ -65,21 +70,27 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.darkThemeMode,
-      home: BlocSelector<AppUserCubit, AppUserState, bool>(
-        selector: (state) {
-          return state is AppUserLoggedIn;
-        },
-        builder: (context, isLoggedIn) {
-          if (isLoggedIn) {
-            return const MainScreen();
-          }
-          return const LoginPage();
-        },
-      ),
+    return BlocBuilder<ThemeBloc, ThemeState>(
+      builder: (context, state) {
+        return MaterialApp(
+          title: 'Flutter Demo',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.getTheme(
+            state is ThemeSuccess && state.themeType == ThemeType.dark,
+          ),
+          home: BlocSelector<AppUserCubit, AppUserState, bool>(
+            selector: (state) {
+              return state is AppUserLoggedIn;
+            },
+            builder: (context, isLoggedIn) {
+              if (isLoggedIn) {
+                return const MainScreen();
+              }
+              return const LoginPage();
+            },
+          ),
+        );
+      },
     );
   }
 }

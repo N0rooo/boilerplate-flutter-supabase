@@ -25,7 +25,7 @@ class CameraControls extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.black,
                     border: Border.all(
-                      color: AppPallete.whiteColor,
+                      color: AppPalette.whiteColor,
                       width: 2,
                     ),
                     shape: BoxShape.circle,
@@ -35,7 +35,7 @@ class CameraControls extends StatelessWidget {
                   width: 56,
                   height: 56,
                   decoration: BoxDecoration(
-                    color: AppPallete.whiteColor,
+                    color: AppPalette.whiteColor,
                     border: Border.all(
                       color: Colors.black,
                       width: 1,

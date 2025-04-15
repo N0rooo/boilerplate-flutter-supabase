@@ -3,7 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  static _border([Color color = AppPallete.borderColor]) => OutlineInputBorder(
+  static ThemeData getTheme(bool isDarkMode) {
+    return isDarkMode ? darkThemeMode : lightThemeMode;
+  }
+
+  static _border([Color color = AppPalette.borderColor]) => OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
         borderSide: BorderSide(
           color: color,
@@ -11,27 +15,34 @@ class AppTheme {
         ),
       );
 
-  static final darkThemeMode = ThemeData.dark().copyWith(
-    scaffoldBackgroundColor: AppPallete.backgroundColor,
+  static final lightThemeMode = ThemeData.light().copyWith(
+    scaffoldBackgroundColor: AppPalette.backgroundColor,
     appBarTheme: const AppBarTheme(
-      backgroundColor: AppPallete.backgroundColor,
+      backgroundColor: AppPalette.backgroundColor,
+    ),
+  );
+
+  static final darkThemeMode = ThemeData.dark().copyWith(
+    scaffoldBackgroundColor: AppPalette.backgroundColor,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: AppPalette.backgroundColor,
     ),
     iconTheme: const IconThemeData(
-      color: AppPallete.whiteColor,
+      color: AppPalette.whiteColor,
     ),
     cupertinoOverrideTheme: const CupertinoThemeData(
       textTheme: CupertinoTextThemeData(
         actionTextStyle: TextStyle(
-          color: AppPallete.whiteColor,
+          color: AppPalette.whiteColor,
         ),
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
       contentPadding: const EdgeInsets.all(27),
       border: _border(),
-      errorBorder: _border(AppPallete.errorColor),
+      errorBorder: _border(AppPalette.errorColor),
       enabledBorder: _border(),
-      focusedBorder: _border(AppPallete.gradient2),
+      focusedBorder: _border(AppPalette.gradient2),
     ),
   );
 }
